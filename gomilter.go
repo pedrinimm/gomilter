@@ -343,6 +343,19 @@ func Go_xxfi_close(ctx *C.SMFICTX) C.sfsistat {
 	if milter.GetDebug() {
 		logger.Printf("Close callback returned: %d\n", code)
 	}
+
+	// Verify if the private data from ctx is already NULL 
+	// Call libmilter smfi_getpriv to get a pointer to our data
+	CArray := (*byte)(C.smfi_getpriv(ctx))
+	pointerToData := unsafe.Pointer(CArray)
+	if pointerToData != nil {
+		lenStart := uintptr(unsafe.Pointer(CArray))
+		// Free the data malloc'ed by C
+		C.free(unsafe.Pointer(lenStart))
+		C.smfi_setpriv(ctx, nil)
+	}
+	
+
 	return C.sfsistat(code)
 }
 
