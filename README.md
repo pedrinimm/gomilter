@@ -13,7 +13,7 @@ yum install sendmail-devel
 Install the gomilter package:
 
 ```sh
-go get github.com/leonrbaker/gomilter
+go get github.com/pedrinimm/gomilter
 ```
 
 ##Usage
